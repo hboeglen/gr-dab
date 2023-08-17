@@ -1,0 +1,43 @@
+id: dab_ofdm_coarse_frequency_correction_vcvc
+label: DAB Coarse Frequency Correction
+category: '[DAB]'
+
+parameters:
+- id: fft_length
+  label:  FFT Length
+  dtype: int
+- id: num_carriers
+  label: Number of Carriers
+  dtype: int
+- id: cyclic_prefix_length
+  label: Cyclic Prefix Length
+  dtype: int
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: ${fft_length}
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: ${num_carriers}
+
+templates:
+  imports: from gnuradio import dab
+  make: dab.ofdm_coarse_frequency_correction_vcvc(${fft_length}, ${num_carriers}, ${cyclic_prefix_length})
+
+documentation: |-
+    Synchronization block specific for DAB OFDM:
+    Coarse frequency synchronization
+    Input: OFDM symbols (vectors of size FFT size). 
+           This block assumes that the input symbols 
+           are already synchronized in frequency
+           up to an integer subcarrier spacing.
+    Output: Extraction of occupied carriers of OFDM symbols. 
+            Output vectors have a length equal to the number 
+            of occupied carriers per OFDM symbol.
+
+file_format: 1

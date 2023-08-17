@@ -1,0 +1,46 @@
+id: dab_ofdm_synchronization_cvc
+label: DAB OFDM Synchronization
+category: '[DAB]'
+
+parameters:
+- id: fft_length
+  label: FFT Length
+  dtype: int
+- id: cyclic_prefix_length
+  label: Cyclic Prefix Length
+  dtype: int
+- id: null_symbol_length
+  label: NULL Symbol Length
+  dtype: int
+- id: symbols_per_frame
+  label: Symbols per frame
+  dtype: int
+
+inputs: 
+- label: in
+  domain: stream
+  dtype: complex
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: ${fft_length}
+
+templates:
+  imports: from gnuradio import dab
+  make: dab.ofdm_synchronization_cvf(${fft_length}, ${cyclic_prefix_length}, ${null_symbol_length}, ${symbols_per_frame})
+
+documentation: |-
+    Synchronization block specific for DAB OFDM
+    Input: Complex IQ data stream
+    Output: OFDM symbols (vectors of size FFT size)
+
+    This block is only part of a complete synchronization chain. It only covers:
+    -Frame synchronization based on energy measurement
+    -Removal of NULL symbol
+    -Time synchronization based on fixed-lag correlation
+    -Fine frequency estimation and correction based on fixed-lag correlation
+    -Removal of cyclic prefix
+
+file_format: 1

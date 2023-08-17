@@ -1,0 +1,44 @@
+id: dab_demux_cc
+label: DAB Demultiplexer
+category: '[DAB]'
+
+parameters:
+- id: symbol_length
+  label: Symbol Length
+  dtype: int
+- id: symbols_fic
+  label: Number of FIC Symbols
+  dtype: int
+- id: symbols_msc
+  label: Number of MSC Symbol
+  dtype: int
+- id: fillval
+  label: Fill Value
+  dtype: complex
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: ${symbol_length}
+
+outputs:
+- label: FIC
+  domain: stream
+  dtype: complex
+  vlen: ${symbol_length}
+- label: MSC
+  domain: stream
+  dtype: complex
+  vlen: ${symbol_length}
+
+templates:
+  imports: from gnuradio import dab
+  make: dab.demux_cc(${symbol_length}, ${symbols_fic}, ${symbols_msc}, ${fillval})
+
+documentation: |-
+    DAB specific multiplexer.
+    -Dumps phase reference symbol (PRS)
+    -Demultiplexes FIC and MSC symbols of a DAB frame.
+
+file_format: 1

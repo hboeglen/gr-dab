@@ -1,0 +1,32 @@
+id: dab_diff_phasor_vcc
+label: DAB Differential Phasor
+category: '[DAB]'
+
+parameters:
+- id: vlen
+  label: Vector Length
+  dtype: int
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: ${vlen}
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: ${vlen}
+
+templates:
+  imports: from gnuradio import dab
+  make: dab.diff_phasor_vcc(${vlen})
+
+documentation: |-
+    DAB specific differential demodulator of QPSK.
+    Works element-wise on vector basis.
+    Input: Vectors of D-QPSK symbols.
+    Output: Vectors of QPSK symbols.
+
+file_format: 1

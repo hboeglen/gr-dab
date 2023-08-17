@@ -1,0 +1,32 @@
+id: dab_frequency_interleaver_vcc
+label: DAB Frequency Interleaver
+category: '[DAB]'
+
+parameters:
+- id: interleaving_sequence
+  label: Interleaving Sequence
+  dtype: raw
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: ${len(interleaving_sequence)}
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: ${len(interleaving_sequence)}
+
+templates:
+  imports: from gnuradio import dab
+  make: dab.frequency_interleaver_vcc(${interleaving_sequence})
+
+documentation: |-
+    Interleaver.
+    Shuffles input vector based on interleaving sequence.
+    Hint: The DAB specific frequency interleaving sequence 
+    is given in <freq_interleaving_seq.txt>
+
+file_format: 1

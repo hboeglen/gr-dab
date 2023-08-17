@@ -1,0 +1,70 @@
+id: dab_dabplus_audio_decoder_ff
+label: DAB+ Audio Decoder
+category: '[DAB]'
+
+parameters:
+- id: dab_mode
+  label: DAB Mode
+  default: '1'
+  dtype: int
+  options: [1,2,3,4]
+  option_labels: ["Mode 1", "Mode 2", "Mode 3", "Mode 4"]
+- id: samp_rate
+  label: Sampling Rate
+  default: samp_rate
+  dtype: int
+- id: bit_rate
+  label: Bit Rate
+  dtype: int
+- id: address
+  label: Address
+  dtype: int
+- id: subch_size
+  label: Sub-channel Size
+  dtype: int
+- id: output_float
+  label: Output Float
+  dtype: bool
+- id: protection
+  label: Protection Mode
+  dtype: int
+  options: [0,1,2,3]
+  option_labels: ["A1", "A2", "A3", "A4"]
+
+inputs:
+- label: MSC
+  domain: stream
+  dtype: complex
+  vlen: 1536
+
+outputs:
+- label: Audio Left
+  domain: stream
+  dtype: float
+- label: Audio Right
+  domain: stream
+  dtype: float
+
+templates:
+    imports: from gnuradio import dab
+    make: dab.dabplus_audio_decoder_ff(dab.parameters.dab_parameters(mode=${dab_mode}, sample_rate=${samp_rate}, verbose=False), ${bit_rate}, ${address}, ${subch_size}, ${protection}, ${output_float})
+
+documentation: |-
+    DAB+ audio decoder: Decodes MSC and extracts audio channel.
+    Input: MSC symbols
+    Output: 2 float streams (stereo audio)
+
+    The block has the following data processing chain
+    -Time deinterleaving
+    -Repartitioning to capacity units (CUs)
+    -Selection of a subchannel
+    -Convolutional decoding 
+        -Unpuncturing
+        -Decoding with Viterbi algorithm
+        -Pruning
+    -Descrambling
+    -Firecode checker (DAB+ specific)
+    -Reed-Solomon decoder
+    -MPEG4 decoder
+
+file_format: 1

@@ -1,0 +1,36 @@
+id: dab_ofdm_demod_cc
+label: DAB OFDM Demodulator
+category: '[DAB]'
+
+parameters:
+- id: dab_mode
+  label: DAB Mode
+  default: '1'
+  dtype: int
+  options: [1,2,3,4]
+  option_labels: ["Mode 1", "Mode 2", "Mode 3", "Mode 4"]
+- id: samp_rate
+  label: Sampling Rate
+  default: samp_rate
+  dtype: int
+
+inputs:
+- label: IQ samples
+  domain: stream
+  dtype: complex
+
+outputs:
+- label: FIC
+  domain: stream
+  dtype: complex
+  vlen: 1536
+- label: MSC
+  domain: stream
+  dtype: complex
+  vlen: 1536
+
+templates:
+    imports: from gnuradio import dab
+    make: dab.ofdm_demod_cc(dab.parameters.dab_parameters(mode=${dab_mode}, sample_rate=${samp_rate}, verbose=0))
+
+file_format: 1

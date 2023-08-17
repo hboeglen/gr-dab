@@ -1,0 +1,40 @@
+id: dab_fic_decode_vc
+label: DAB FIC Decoder
+category: '[DAB]'
+
+parameters:
+- id: dab_mode
+  label: DAB Mode
+  default: '1'
+  dtype: int
+  options: [1,2,3,4]
+  option_labels: ["Mode 1", "Mode 2", "Mode 3", "Mode 4"]
+- id: samp_rate
+  label: Sampling Rate
+  default: samp_rate
+  dtype: int
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: 1536
+
+templates:
+    imports: from gnuradio import dab
+    make: dab.fic_decode_vc(dab.parameters.dab_parameters(mode=${dab_mode}, sample_rate=${samp_rate}, verbose=False))
+
+documentation: |-
+    DAB+ FIC decoder: Decodes FIC and prints FIC info to terminal.
+    Input: FIBs
+
+    The block has the following data processing chain
+    -Convolutional decoding 
+        -Unpuncturing
+        -Decoding with Viterbi algorithm
+        -Pruning
+    -Descrambling
+    -CRC
+    -FIB parser
+
+file_format: 1
