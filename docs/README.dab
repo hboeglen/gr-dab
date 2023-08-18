@@ -1,11 +1,30 @@
-This is the dab-write-a-block package meant as a guide to building
-out-of-tree packages. To use the dab blocks, the Python namespaces
-is in 'dab', which is imported as:
+This is the gr-dab OOT module from KIT (https://github.com/kit-cel/gr-dab) ported to GNU Radio 3.10.
+To use the dab blocks, the Python namespaces
+is in 'gnuradio/dab', which is imported as:
 
-    import dab
+from gnuradio import dab
 
-See the Doxygen documentation for details about the blocks available
-in this package. A quick listing of the details can be found in Python
-after importing by using:
+Issues (08/18/23):
 
-    help(dab)
+Doxygen documentation does not compile: add option -DENABLE_DOXYGEN=OFF to cmake command.
+DABstep pyqt5 GUI: sound is not working.
+Sometimes with make -jx with x > 8 the compilation fails (cmake in parallel cannot process the operations in the right order...). Just repeat the make command!
+
+Build step:
+
+Dependencies: 
+pyuic5 (for DABstep GUI): apt install pyqt5-dev-tools
+faad library : apt install libfaad-dev
+fdk-aac-dab libraries : build them from the gr-dab/fdk-aac-dab subdirectory (./bootstrap, ./configure, make, make install).
+toolame-dab library : build it from the gr-dab/ODR-AudioEnc (./bootstrap, ./configure, make, make install).
+
+In the gr-dab directory:
+
+mkdir build && cd build
+cmake -DENABLE_DOXYGEN=OFF ../
+make -jx with x the number of cores of your processor 
+sudo make install
+
+Although DABstep GUI is not fully functional, it allows to scan DAB stations to get the right parameters for the grc flowgraphs dedicated to the reception of DAB stations (start with dab_receiver_detailed.grc).You will need the frequency of the DAB multiplex to decode (see https://www.electronics-notes.com/articles/audio-video/broadcast-audio/digital-radio-audio-broadcasting-dab-frequencies.php), the bit rate, the address, the subchannel size and the protection level.
+
+
